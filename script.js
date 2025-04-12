@@ -69,7 +69,7 @@ function handleMouseMove(e) {
     const rect = canvas.getBoundingClientRect();
     const mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
     const mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
-    
+
     // 根据鼠标相对于蛇头的位置来决定方向
     updateDirectionFromPosition(mouseX, mouseY);
 }
@@ -79,11 +79,11 @@ function handleMouseClick(e) {
     const rect = canvas.getBoundingClientRect();
     const mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
     const mouseY = (e.clientY - rect.top) * (canvas.height / rect.height);
-    
+
     // 决定哪条蛇应该移动 - 选择距离点击位置最近的蛇
     const dist1 = Math.hypot(mouseX - snake1[0].x, mouseY - snake1[0].y);
     const dist2 = Math.hypot(mouseX - snake2[0].x, mouseY - snake2[0].y);
-    
+
     if (dist1 < dist2) {
         activeController.player1 = "mouse";
         updateDirectionFromPosition(mouseX, mouseY, 1);
@@ -100,11 +100,11 @@ function handleTouch(e) {
     const touch = e.touches[0];
     const touchX = (touch.clientX - rect.left) * (canvas.width / rect.width);
     const touchY = (touch.clientY - rect.top) * (canvas.height / rect.height);
-    
+
     // 决定哪条蛇应该移动 - 选择距离触摸位置最近的蛇
     const dist1 = Math.hypot(touchX - snake1[0].x, touchY - snake1[0].y);
     const dist2 = Math.hypot(touchX - snake2[0].x, touchY - snake2[0].y);
-    
+
     if (dist1 < dist2) {
         activeController.player1 = "touch";
         updateDirectionFromPosition(touchX, touchY, 1);
@@ -118,10 +118,10 @@ function handleTouch(e) {
 function updateDirectionFromPosition(x, y, player = 1) {
     const snake = player === 1 ? snake1 : snake2;
     const head = snake[0];
-    
+
     const dx = x - (head.x + TILE_SIZE/2);
     const dy = y - (head.y + TILE_SIZE/2);
-    
+
     // 确定主要方向（水平或垂直）
     if (Math.abs(dx) > Math.abs(dy)) {
         // 水平移动
@@ -152,15 +152,15 @@ function moveSnake(snake, direction) {
         case "L": head.x -= TILE_SIZE; break;
         case "R": head.x += TILE_SIZE; break;
     }
-    
+
     // 处理穿越边界
     if (head.x < 0) head.x = GAME_WIDTH - TILE_SIZE;
     else if (head.x >= GAME_WIDTH) head.x = 0;
     if (head.y < 0) head.y = GAME_HEIGHT - TILE_SIZE;
     else if (head.y >= GAME_HEIGHT) head.y = 0;
-    
+
     snake.unshift(head);
-    
+
     // 检查是否吃到食物
     if (head.x === food.x && head.y === food.y) {
         spawnFood();
@@ -173,7 +173,7 @@ function moveSnake(snake, direction) {
 
 function checkCollision(snake) {
     const head = snake[0];
-    
+
     // 检查自身碰撞
     for (let i = 1; i < snake.length; i++) {
         if (head.x === snake[i].x && head.y === snake[i].y) return true;
@@ -188,12 +188,12 @@ function gameOver() {
     ctx.font = "40px Microsoft JhengHei";
     ctx.textAlign = "center";
     ctx.fillText("遊戲結束", GAME_WIDTH / 2, GAME_HEIGHT / 2);
-    
+
     ctx.fillStyle = "white";
     ctx.font = "20px Microsoft JhengHei";
     ctx.fillText("分數: " + score1, GAME_WIDTH / 2, GAME_HEIGHT / 2 + 40);
     ctx.fillText("玩家2分數: " + score2, GAME_WIDTH / 2, GAME_HEIGHT / 2 + 80);
-    
+
     restartButton.style.display = "inline-block";
 }
 
@@ -220,7 +220,7 @@ function gameLoop() {
             running = false;
         }
     }
-    
+
     if (running2) {
         if (moveSnake(snake2, direction2)) {
             score2++; // 吃到食物加分
@@ -235,37 +235,37 @@ function gameLoop() {
 
 document.addEventListener("keydown", (e) => {
     switch (e.key) {
-        case "ArrowUp": 
+        case "ArrowUp":
             activeController.player1 = "keyboard";
-            if (direction1 !== "D") direction1 = "U"; 
+            if (direction1 !== "D") direction1 = "U";
             break;
-        case "ArrowDown": 
+        case "ArrowDown":
             activeController.player1 = "keyboard";
-            if (direction1 !== "U") direction1 = "D"; 
+            if (direction1 !== "U") direction1 = "D";
             break;
-        case "ArrowLeft": 
+        case "ArrowLeft":
             activeController.player1 = "keyboard";
-            if (direction1 !== "R") direction1 = "L"; 
+            if (direction1 !== "R") direction1 = "L";
             break;
-        case "ArrowRight": 
+        case "ArrowRight":
             activeController.player1 = "keyboard";
-            if (direction1 !== "L") direction1 = "R"; 
+            if (direction1 !== "L") direction1 = "R";
             break;
-        case "w": 
+        case "w":
             activeController.player2 = "keyboard";
-            if (direction2 !== "D") direction2 = "U"; 
+            if (direction2 !== "D") direction2 = "U";
             break;
-        case "s": 
+        case "s":
             activeController.player2 = "keyboard";
-            if (direction2 !== "U") direction2 = "D"; 
+            if (direction2 !== "U") direction2 = "D";
             break;
-        case "a": 
+        case "a":
             activeController.player2 = "keyboard";
-            if (direction2 !== "R") direction2 = "L"; 
+            if (direction2 !== "R") direction2 = "L";
             break;
-        case "d": 
+        case "d":
             activeController.player2 = "keyboard";
-            if (direction2 !== "L") direction2 = "R"; 
+            if (direction2 !== "L") direction2 = "R";
             break;
     }
 });
