@@ -1,8 +1,17 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-canvas.width = 400;
-canvas.height = 400;
+canvas.width = window.innerWidth * 0.8;
+canvas.height = window.innerHeight * 0.8;
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth * 0.8;
+    canvas.height = window.innerHeight * 0.8;
+    food = {
+        x: Math.floor(Math.random() * Math.floor(canvas.width / gridSize)) * gridSize,
+        y: Math.floor(Math.random() * Math.floor(canvas.height / gridSize)) * gridSize
+    };
+});
 
 const gridSize = 20;
 let snake = [{ x: 200, y: 200 }];
@@ -10,6 +19,17 @@ let food = { x: 100, y: 100 };
 let direction = { x: 0, y: -gridSize };
 let nextDirection = direction;
 let gameOver = false;
+
+const restartButton = document.getElementById('restartButton');
+restartButton.addEventListener('click', () => {
+    snake = [{ x: 200, y: 200 }];
+    food = { x: 100, y: 100 };
+    direction = { x: 0, y: -gridSize };
+    nextDirection = direction;
+    gameOver = false;
+    restartButton.style.display = 'none';
+    gameLoop();
+});
 
 // 觸摸事件處理
 let touchStartX = 0;
@@ -39,17 +59,21 @@ canvas.addEventListener('touchmove', (e) => {
 // 遊戲主循環
 function gameLoop() {
     if (gameOver) {
-        alert('遊戲結束！');
+        restartButton.style.display = 'block';
         return;
     }
 
     direction = nextDirection;
     const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
 
+    // 邊界穿越
+    if (head.x < 0) head.x = canvas.width - gridSize;
+    else if (head.x >= canvas.width) head.x = 0;
+    if (head.y < 0) head.y = canvas.height - gridSize;
+    else if (head.y >= canvas.height) head.y = 0;
+
     // 碰撞檢測
     if (
-        head.x < 0 || head.x >= canvas.width ||
-        head.y < 0 || head.y >= canvas.height ||
         snake.some(segment => segment.x === head.x && segment.y === head.y)
     ) {
         gameOver = true;
@@ -60,8 +84,8 @@ function gameLoop() {
     // 吃到食物
     if (head.x === food.x && head.y === food.y) {
         food = {
-            x: Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize,
-            y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize
+            x: Math.floor(Math.random() * Math.floor(canvas.width / gridSize)) * gridSize,
+            y: Math.floor(Math.random() * Math.floor(canvas.height / gridSize)) * gridSize
         };
     } else {
         snake.pop();
