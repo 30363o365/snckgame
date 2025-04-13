@@ -56,6 +56,23 @@ canvas.addEventListener('touchmove', (e) => {
     }
 });
 
+// 繪製格子背景
+function drawGrid() {
+    ctx.strokeStyle = '#ddd';
+    for (let x = 0; x < canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+    }
+    for (let y = 0; y < canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+    }
+}
+
 // 遊戲主循環
 function gameLoop() {
     if (gameOver) {
@@ -93,6 +110,7 @@ function gameLoop() {
 
     // 繪製畫面
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawGrid(); // 繪製格子背景
     ctx.fillStyle = 'green';
     snake.forEach(segment => ctx.fillRect(segment.x, segment.y, gridSize, gridSize));
 
@@ -103,4 +121,3 @@ function gameLoop() {
 }
 
 gameLoop();
-
