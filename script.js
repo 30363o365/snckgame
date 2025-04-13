@@ -1,6 +1,6 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-
+//
 const gridSize = 20;
 
 // 確保畫布尺寸是格子大小的整數倍
