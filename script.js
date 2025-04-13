@@ -82,7 +82,7 @@ function gameLoop() {
     snake.unshift(head);
 
     // 吃到食物
-    if (head.x === food.x && head.y === food.y) {
+    if (Math.abs(head.x - food.x) < gridSize && Math.abs(head.y - food.y) < gridSize) {
         food = {
             x: Math.floor(Math.random() * Math.floor(canvas.width / gridSize)) * gridSize,
             y: Math.floor(Math.random() * Math.floor(canvas.height / gridSize)) * gridSize
@@ -103,3 +103,4 @@ function gameLoop() {
 }
 
 gameLoop();
+
